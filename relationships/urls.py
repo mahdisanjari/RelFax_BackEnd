@@ -10,3 +10,4 @@ urlpatterns = [
     path("request/<int:pk>/action/", RelationshipRequestActionView.as_view()),
     path("user/<int:user_id>/relationships/", UserPublicRelationshipsView.as_view()),
 ]
+

@@ -5,6 +5,32 @@ from .models import RelationshipRequest, Relationship, RelationshipType
 User = get_user_model()
 
 
+User = get_user_model()
+
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+    """Used for embedding user info inside relationship requests"""
+
+    class Meta:
+        model = User
+        fields = ["id", "email"]
+
+
+class RelationshipRequestListSerializer(serializers.ModelSerializer):
+    from_user = SimpleUserSerializer()
+    to_user = SimpleUserSerializer()
+    relationship_type_name = serializers.CharField(source="relationship_type.name")
+
+    class Meta:
+        model = RelationshipRequest
+        fields = [
+            "id",
+            "from_user",
+            "to_user",
+            "relationship_type_name",
+            "status",
+            "created_at",
+        ]
 class RelationshipTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = RelationshipType
