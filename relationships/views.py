@@ -3,14 +3,15 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from .models import RelationshipRequest, Relationship
+from .models import RelationshipRequest, Relationship,RelationshipType
 from .serializers import (
     RelationshipRequestCreateSerializer,
     RelationshipRequestActionSerializer,
-    RelationshipSerializer
+    RelationshipSerializer,
+    RelationshipTypeSerializer
 )
 
 
@@ -24,7 +25,13 @@ class SendRelationshipRequestView(generics.CreateAPIView):
     """
     serializer_class = RelationshipRequestCreateSerializer
     permission_classes = [IsAuthenticated]
-
+class RelationshipTypeListView(generics.ListAPIView):
+    """
+    list all available relationship types
+    """
+    serializer_class = RelationshipTypeSerializer
+    permission_classes = [AllowAny]
+    queryset = RelationshipType.objects.all()
 
 class RelationshipRequestActionView(generics.GenericAPIView):
     serializer_class = RelationshipRequestActionSerializer

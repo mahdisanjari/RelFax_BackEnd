@@ -34,7 +34,7 @@ class RelationshipRequestListSerializer(serializers.ModelSerializer):
 class RelationshipTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = RelationshipType
-        fields = "__all__"
+        fields = ["id", "name", "is_public"]
 
 
 class RelationshipRequestCreateSerializer(serializers.ModelSerializer):
