@@ -71,16 +71,14 @@ class PublicProfileView(generics.RetrieveAPIView):
 class UserListView(generics.ListAPIView):
     """
     list users with search capability
-
-    search fields:
-    - email
-    - first_name
-    - last_name
-    - bio
+    excluding authenticated user
     """
     serializer_class = UserListSerializer
     permission_classes = [IsAuthenticated]
 
-    queryset = User.objects.exclude(id=self.request.user.id)
     filter_backends = [filters.SearchFilter]
     search_fields = ["email", "first_name", "last_name", "bio"]
+
+    def get_queryset(self):
+        # exclude authenticated user from the list
+        return User.objects.exclude(id=self.request.user.id)
