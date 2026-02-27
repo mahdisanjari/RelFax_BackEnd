@@ -61,3 +61,23 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "email", "bio", "profile_status"]
         read_only_fields = ["email"]
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    """Serializer used for listing users"""
+
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "full_name",
+            "bio",
+        ]
+
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}".strip()

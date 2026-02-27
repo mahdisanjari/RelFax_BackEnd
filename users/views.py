@@ -2,11 +2,12 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
-
+from rest_framework import generics, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import (
     RegisterSerializer,
     LoginSerializer,
-    ProfileSerializer
+    ProfileSerializer,UserListSerializer
 )
 
 User = get_user_model()
@@ -65,3 +66,21 @@ class PublicProfileView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     queryset = User.objects.all()
     lookup_field = "id"
+
+
+class UserListView(generics.ListAPIView):
+    """
+    list users with search capability
+
+    search fields:
+    - email
+    - first_name
+    - last_name
+    - bio
+    """
+    serializer_class = UserListSerializer
+    permission_classes = [IsAuthenticated]
+
+    queryset = User.objects.exclude(id=self.request.user.id)
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["email", "first_name", "last_name", "bio"]
