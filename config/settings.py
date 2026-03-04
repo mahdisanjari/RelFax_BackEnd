@@ -26,7 +26,7 @@ AUTH_USER_MODEL = "users.User"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['relfax.ca', 'www.relfax.ca','relfax.com', 'www.relfax.com']
 
 
 # Application definition
@@ -59,6 +59,10 @@ MIDDLEWARE = [
 ]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+      'https://relfax.ca',
+    'https://www.relfax.ca',
+      'https://relfax.com',
+    'https://www.relfax.com',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'config.urls'
