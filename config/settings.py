@@ -26,7 +26,7 @@ AUTH_USER_MODEL = "users.User"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['relfax.ca', 'www.relfax.ca','relfax.com', 'www.relfax.com']
+ALLOWED_HOSTS = ['relfax.ca', 'www.relfax.ca','relfax.com', 'www.relfax.com','localhost']
 
 
 # Application definition

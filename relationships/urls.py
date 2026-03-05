@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     SendRelationshipRequestView,
     RelationshipRequestActionView,
-    UserPublicRelationshipsView,RelationshipTypeListView
+    UserPublicRelationshipsView,RelationshipTypeListView,PendingReceivedRequestsView
 )
 
 urlpatterns = [
@@ -10,5 +10,6 @@ urlpatterns = [
     path("request/<int:pk>/action/", RelationshipRequestActionView.as_view()),
     path("user/<int:user_id>/relationships/", UserPublicRelationshipsView.as_view()),
     path("relationship-types/", RelationshipTypeListView.as_view()),
+    path('api/relationship-requests/pending/',PendingReceivedRequestsView.as_view(),name='pending-requests'),
 ]
 

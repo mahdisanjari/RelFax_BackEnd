@@ -11,7 +11,7 @@ from .serializers import (
     RelationshipRequestCreateSerializer,
     RelationshipRequestActionSerializer,
     RelationshipSerializer,
-    RelationshipTypeSerializer
+    RelationshipTypeSerializer,RelationshipRequestSerializer
 )
 
 
@@ -118,3 +118,13 @@ class UserPublicRelationshipsView(generics.ListAPIView):
             is_active=True,
             relationship_type__is_public=True
         )
+
+class PendingReceivedRequestsView(generics.ListAPIView):
+    serializer_class = RelationshipRequestSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return RelationshipRequest.objects.filter(
+            to_user=self.request.user,
+            status='pending'
+        ).select_related('from_user', 'relationship_type')

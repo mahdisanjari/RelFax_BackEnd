@@ -74,3 +74,27 @@ class RelationshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Relationship
         fields = "__all__"
+
+class RelationshipRequestSerializer(serializers.ModelSerializer):
+    from_user_username = serializers.CharField(source='from_user.username', read_only=True)
+    from_user_full_name = serializers.SerializerMethodField()
+    relationship_type_name = serializers.CharField(source='relationship_type.name', read_only=True)
+
+    class Meta:
+        model = RelationshipRequest
+        fields = [
+            'id',
+            'from_user',
+            'from_user_username',
+            'from_user_full_name',
+            'to_user',
+            'relationship_type',
+            'relationship_type_name',
+            'status',
+            'created_at',
+        ]
+        read_only_fields = ['id', 'created_at']
+
+    def get_from_user_full_name(self, obj):
+        user = obj.from_user
+        return f"{user.first_name} {user.last_name}".strip()
