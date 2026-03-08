@@ -62,13 +62,17 @@ class RelationshipRequestActionView(generics.GenericAPIView):
                     relationship_type=relation_request.relationship_type
                 )
 
+                relation_request.to_user.profile_status = relation_request.relationship_type
+                relation_request.from_user.profile_status = relation_request.relationship_type
+
+                relation_request.to_user.save()
+                relation_request.from_user.save()
+
             elif action == "reject":
                 relation_request.status = "rejected"
                 relation_request.save()
 
         return Response({"detail": f"Request {action}ed successfully"})
-
-
 class RelationshipRequestActionView(generics.GenericAPIView):
     serializer_class = RelationshipRequestActionSerializer
     permission_classes = [IsAuthenticated]
