@@ -101,8 +101,12 @@ class RelationshipRequestActionView(generics.GenericAPIView):
                     user2=relation_request.to_user,
                     relationship_type=relation_request.relationship_type
                 )
-                relation_request.to_user.profile_status = relation_request.relationship_type
-                relation_request.from_user.profile_status = relation_request.relationship_type
+                
+                relation_request.to_user.profile_status = relation_request.relationship_type.name
+                relation_request.to_user.save(update_fields=["profile_status"])
+
+                relation_request.from_user.profile_status = relation_request.relationship_type.name
+                relation_request.from_user.save(update_fields=["profile_status"])
             elif action == "reject":
                 relation_request.status = "rejected"
                 relation_request.save()
