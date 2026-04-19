@@ -55,13 +55,13 @@ class RelationshipRequestActionView(generics.GenericAPIView):
             if action == "accept":
                 relation_request.status = "accepted"
                 relation_request.save()
-
+                
                 Relationship.objects.create(
                     user1=relation_request.from_user,
                     user2=relation_request.to_user,
                     relationship_type=relation_request.relationship_type
                 )
-
+                print('status',relation_request,relation_request.to_user)
                 relation_request.to_user.profile_status = relation_request.relationship_type
                 relation_request.from_user.profile_status = relation_request.relationship_type
 
@@ -101,7 +101,8 @@ class RelationshipRequestActionView(generics.GenericAPIView):
                     user2=relation_request.to_user,
                     relationship_type=relation_request.relationship_type
                 )
-
+                relation_request.to_user.profile_status = relation_request.relationship_type
+                relation_request.from_user.profile_status = relation_request.relationship_type
             elif action == "reject":
                 relation_request.status = "rejected"
                 relation_request.save()
