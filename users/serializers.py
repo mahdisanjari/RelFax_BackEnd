@@ -77,6 +77,7 @@ class UserListSerializer(serializers.ModelSerializer):
             "last_name",
             "full_name",
             "bio",
+            'profile_status',
         ]
 
     def get_full_name(self, obj):
