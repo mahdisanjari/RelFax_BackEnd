@@ -4,7 +4,7 @@ from .views import (
     LoginView,
     MyProfileView,
     EditProfileView,
-    PublicProfileView
+    PublicProfileView,ConfirmEmailView
 )
 from .views import UserListView
 urlpatterns = [
@@ -14,4 +14,6 @@ urlpatterns = [
     path("me/edit/", EditProfileView.as_view()),
     path("profile/<int:id>/", PublicProfileView.as_view()),
     path("list/", UserListView.as_view()),
+        path('confirm/<uidb64>/<token>/', ConfirmEmailView.as_view(), name='confirm_email'),
+
 ]

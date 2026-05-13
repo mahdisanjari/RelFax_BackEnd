@@ -6,6 +6,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django.contrib import admin
+
 schema_view = get_schema_view(
    openapi.Info(
       title="Relationship Platform API",
@@ -20,6 +22,8 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+        path('admin/', admin.site.urls),
+
     path("api/", include("relationships.urls")),
     path("api/token/", TokenObtainPairView.as_view()),
     path("api/token/refresh/", TokenRefreshView.as_view()),

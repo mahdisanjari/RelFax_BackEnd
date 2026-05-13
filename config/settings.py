@@ -134,7 +134,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+# settings.py
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = "587"
+EMAIL_HOST_USER = "pigeonloginfo@gmail.com"
+EMAIL_HOST_PASSWORD = "nrncvrngpnilnnqa"
+EMAIL_USE_TLS = True   # But you have disabled TLS
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
