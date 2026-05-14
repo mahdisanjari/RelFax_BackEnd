@@ -65,6 +65,12 @@ CORS_ALLOWED_ORIGINS = [
     'https://www.relfax.com',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = [
+    'https://relfax.ca',
+    'https://www.relfax.ca',
+    'https://relfax.com',
+    'https://www.relfax.com',
+]
 ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
