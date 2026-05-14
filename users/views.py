@@ -9,8 +9,10 @@ from .serializers import (
     LoginSerializer,
     ProfileSerializer,UserListSerializer
 )
-
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 User = get_user_model()
+from django.core.mail import send_mail
 
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
@@ -18,6 +20,8 @@ from django.utils.http import urlsafe_base64_decode
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.conf import settings
+
 class ConfirmEmailView(APIView):
     permission_classes = [AllowAny]
 
@@ -104,3 +108,29 @@ class UserListView(generics.ListAPIView):
     def get_queryset(self):
         # exclude authenticated user from the list
         return User.objects.exclude(id=self.request.user.id)
+
+class ResendConfirmationView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({"detail": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(email=email, is_active=False)
+        except User.DoesNotExist:
+            # For security, don't reveal if user exists or is already active
+            return Response({"detail": "If the email is registered and inactive, a new confirmation link has been sent."},
+                            status=status.HTTP_200_OK)
+
+        # Generate new token and uid
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        confirm_url = f"https://relfax.ca/auth/confirm/{uid}/{token}/"
+
+        subject = "Confirm your email address (resend)"
+        message = f"Hi {user.email},\n\nPlease click the link below to activate your account:\n\n{confirm_url}"
+        send_mail(subject, message, user.email, [user.email])
+
+        return Response({"detail": "Confirmation email sent."}, status=status.HTTP_200_OK)

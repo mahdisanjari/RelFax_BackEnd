@@ -47,7 +47,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def _send_confirmation_email(self, user):
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        confirm_url = f"/confirm/{uid}/{token}/"  # adjust URL
+        confirm_url = f"https://relfax.ca/auth/confirm/{uid}/{token}/"  # adjust URL
         subject = "Confirm your email address"
         message = f"Hi {user.email},\n\nPlease click the link to activate your account:\n\n{confirm_url}"
         send_mail(subject, message, user.email,[user.email])
