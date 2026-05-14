@@ -73,14 +73,54 @@ class LoginSerializer(serializers.Serializer):
     
 
 class ProfileSerializer(serializers.ModelSerializer):
+    relationship_with = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ["id", "email", "bio", "profile_status",'first_name','last_name','profile_image']
+        fields = [
+            "id", "email", "bio", "profile_status",
+            "first_name", "last_name", "profile_image",
+            "relationship_with"          # <-- new field
+        ]
         read_only_fields = ["email"]
         extra_kwargs = {
             'profile_image': {'required': False}
         }
+
+    def get_relationship_with(self, obj):
+        # Only compute if the user is "in a relationship"
+        if obj.profile_status != "in-relationship":
+            return None
+
+        # Try to find an active relationship where this user is user1 or user2
+        # and the relationship_type indicates "partner" (adjust the lookup to your model)
+        from relationships.models import Relationship  # or import at top
+        # Assume there is a RelationshipType with name="partner"
+        try:
+            rel = Relationship.objects.filter(
+                (Relationship.Q(user1=obj) | Relationship.Q(user2=obj)),
+                relationship_type__name="partner",  # change field name if needed
+                is_active=True
+            ).first()
+        except:
+            # If RelationshipType model doesn't have 'name', you might use id
+            # or you can simply get any active relationship
+            rel = Relationship.objects.filter(
+                Relationship.Q(user1=obj) | Relationship.Q(user2=obj),
+                is_active=True
+            ).first()
+
+        if rel:
+            partner = rel.user2 if rel.user1 == obj else rel.user1
+            # Return the partner's full name or email
+            return {
+                "id": partner.id,
+                "full_name": partner.get_full_name() or partner.email,
+                "first_name": partner.first_name,
+                "last_name": partner.last_name,
+                "profile_image": partner.profile_image.url if partner.profile_image else None
+            }
+        return None
 
 
 class UserListSerializer(serializers.ModelSerializer):
