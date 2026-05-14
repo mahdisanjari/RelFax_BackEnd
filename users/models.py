@@ -29,8 +29,16 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
 
+    # first_name and last_name are already provided by AbstractUser
+    # You can still override them if you want to change behaviour:
+    # first_name = models.CharField(max_length=150, blank=True)
+    # last_name = models.CharField(max_length=150, blank=True)
+
     bio = models.TextField(blank=True, null=True)
     profile_status = models.CharField(max_length=255, blank=True, null=True)
+
+    # NEW: profile image field
+    profile_image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
