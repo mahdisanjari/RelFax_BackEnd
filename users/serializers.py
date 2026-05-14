@@ -78,6 +78,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "email", "bio", "profile_status",'first_name','last_name','profile_image']
         read_only_fields = ["email"]
+        extra_kwargs = {
+            'profile_image': {'required': False}
+        }
 
 
 class UserListSerializer(serializers.ModelSerializer):

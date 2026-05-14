@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     "relationships",
     'drf_yasg',
 ]
-
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240  # if many fields
+DATA_UPLOAD_MAX_NUMBER_FILES = 100
+DATA_UPLOAD_MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
 MIDDLEWARE = [
        "corsheaders.middleware.CorsMiddleware",  # must be high in the list
     "django.middleware.common.CommonMiddleware",
